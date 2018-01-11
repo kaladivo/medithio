@@ -46,6 +46,7 @@ export default class MeditationScreen extends React.Component<Props> {
 
 	onPressBack = () => {
 		showExitAlert()
+		return true
 	}
 
 	onEnd = (meditation: MeditationType) => {
