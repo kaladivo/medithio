@@ -1,9 +1,10 @@
 //@flow 
 
 import React from 'react'
-import {View, Button, StyleSheet} from 'react-native'
+import {View, Button, StyleSheet, Alert, BackHandler} from 'react-native'
 import {observer} from 'mobx-react'
 import {autorun} from 'mobx'
+import {HeaderBackButton} from 'react-navigation'
 
 import Countdown from '../components/Countdown'
 import appStore from '../stores/appStore'
@@ -17,6 +18,12 @@ type Props = {}
 //$FlowFixMe
 @observer
 export default class MeditationScreen extends React.Component<Props> {
+	static navigationOptions = {
+		headerLeft: () => {
+			return <HeaderBackButton onPress={showExitAlert}/>
+		},
+	}
+
 	//$FlowFixMe
 	navigation = this.props.navigation
 	disposeAutorun = () => null
@@ -27,14 +34,18 @@ export default class MeditationScreen extends React.Component<Props> {
 			//$FlowFixMe
 			if (!meditationService.meditationRunning) this.onEnd(meditationService.currentMeditation)
 		})
+
+		BackHandler.addEventListener('hardwareBackPress', this.onPressBack)
 	}
 
 	componentWillUnmount() {
 		this.disposeAutorun()
+
+		BackHandler.removeEventListener('hardwareBackPress', this.onPressBack)
 	}
 
-	stop = () => {
-		meditationService.stopMeditation()
+	onPressBack = () => {
+		showExitAlert()
 	}
 
 	onEnd = (meditation: MeditationType) => {
@@ -52,16 +63,27 @@ export default class MeditationScreen extends React.Component<Props> {
 	render() {
 		const currentMeditation = meditationService.currentMeditation
 		if (!currentMeditation) return // Should not happen
-		
+
 		return <View style={styles.container}>
 			<Countdown
 				target={new Date(currentMeditation.startedAt.getTime() + currentMeditation.durationSec * 1000)}
 				onFinish={() => null}/>
 			<Button
 				title={'Zastavit'}
-				onPress={this.stop}/>
+				onPress={showExitAlert}/>
 		</View>
 	}
+}
+
+const showExitAlert = () => {
+	Alert.alert(
+		'Jsi si jistý? ',
+		'Tím, že odejdeš vypneš probíhající meditaci',
+		[
+			{text: 'Zůstat', onPress: () => null},
+			{text: 'Odejít', onPress: () => meditationService.stopMeditation()},
+		],
+	)
 }
 
 const styles = StyleSheet.create({

@@ -16,7 +16,7 @@ const AppStack = StackNavigator({
 	Meditation: {
 		screen: MeditationScreen,
 	},
-}, {headerMode: 'none'})
+})
 
 export default class AppScreen extends React.Component<Props> {
 	render() {
