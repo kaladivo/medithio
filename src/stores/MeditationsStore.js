@@ -44,7 +44,7 @@ export default class MeditationsStore {
 		let lastDate = new Date
 
 		for (const meditation of this.meditations) {
-			if (lastDate.getTime() - meditation.startedAt.getTime() < 24 * 60 * 1000) currentStreak++
+			if (lastDate.getTime() - meditation.startedAt.getTime() < 24 * 60 * 60 * 1000) currentStreak++
 			else {
 				streaks.push(currentStreak)
 				currentStreak = 1
