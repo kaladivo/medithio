@@ -3,6 +3,8 @@
 import React from 'react'
 import {View, StyleSheet, Text, Button, TextInput, Keyboard, ToastAndroid} from 'react-native'
 import MeditationsStats from '../components/MeditationsStats'
+import {autorun} from 'mobx'
+import meditationService from '../nativeModules/meditationService'
 
 type Props = {
 	navigation: any
@@ -14,9 +16,20 @@ type State = {
 
 export default class HomeScreen extends React.Component<Props, State> {
 	state = {selectedDurationMin: 20}
+	navigation = this.props.navigation
+	disposeAutorun: () => null
+
+	componentDidMount() {
+		this.disposeAutorun = autorun(() => {
+			if (meditationService.meditationRunning) this.navigation.navigate('Meditation')
+		})
+	}
+
+	componentWillUnmount() {
+		this.disposeAutorun()
+	}
 
 	startMeditation = () => {
-		const {navigation} = this.props
 		const {selectedDurationMin} = this.state
 
 		if (selectedDurationMin === '') {
@@ -25,7 +38,10 @@ export default class HomeScreen extends React.Component<Props, State> {
 		}
 
 		Keyboard.dismiss()
-		navigation.navigate('Meditation', {selectedDurationMin})
+		meditationService.startMeditation({
+			startedAt: new Date(),
+			durationSec: selectedDurationMin * 60,
+		})
 	}
 
 	onSelectTime = (text: string) => {

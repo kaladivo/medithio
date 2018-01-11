@@ -1,45 +1,65 @@
 //@flow 
 
 import React from 'react'
-import {View, Text, Button, StyleSheet} from 'react-native'
+import {View, Button, StyleSheet} from 'react-native'
+import {observer} from 'mobx-react'
+import {autorun} from 'mobx'
 
 import Countdown from '../components/Countdown'
 import appStore from '../stores/appStore'
 import MeditationRecord from '../models/MeditationRecord'
+import meditationService from '../nativeModules/meditationService'
+
+import type {MeditationType} from '../nativeModules/meditationService'
 
 type Props = {}
 
+//$FlowFixMe
+@observer
 export default class MeditationScreen extends React.Component<Props> {
-	startedAt = new Date()
+	//$FlowFixMe
+	navigation = this.props.navigation
+	disposeAutorun = () => null
 
-	cancel = () => {
-		//$FlowFixMe
-		const {navigation} = this.props
-		navigation.goBack()
+
+	componentDidMount() {
+		this.disposeAutorun = autorun(() => {
+			//$FlowFixMe
+			if (!meditationService.meditationRunning) this.onEnd(meditationService.currentMeditation)
+		})
 	}
 
-	onFinish = () => {
-		//$FlowFixMe
-		const {selectedDurationMin} = this.props.navigation.state.params
-		appStore.meditationsStore.addMeditation(new MeditationRecord({
-			startedAt: this.startedAt,
-			durationSec: selectedDurationMin * 60,
-		}))
+	componentWillUnmount() {
+		this.disposeAutorun()
+	}
 
-		//$FlowFixMe
-		const {navigation} = this.props
-		navigation.goBack()
+	stop = () => {
+		meditationService.stopMeditation()
+	}
+
+	onEnd = (meditation: MeditationType) => {
+
+		if (meditation.completed) {
+			appStore.meditationsStore.addMeditation(new MeditationRecord({
+				startedAt: meditation.startedAt,
+				durationSec: meditation.durationSec,
+			}))
+		}
+
+		this.navigation.goBack()
 	}
 
 	render() {
-		//$FlowFixMe
-		const {selectedDurationMin} = this.props.navigation.state.params
-
+		const currentMeditation = meditationService.currentMeditation
+		if (!currentMeditation) return // Should not happen
+		
 		return <View style={styles.container}>
 			<Countdown
-				target={new Date(this.startedAt.getTime() + selectedDurationMin * 60 * 1000)}
-				onFinish={this.onFinish}/>
-			<Button title={'Cancel'} onPress={this.cancel}/>
+				target={new Date(currentMeditation.startedAt.getTime() + currentMeditation.durationSec * 1000)}
+				onFinish={() => null}/>
+			<Button
+				title={'Zastavit'}
+				onPress={this.stop}/>
 		</View>
 	}
 }
