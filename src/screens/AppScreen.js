@@ -6,6 +6,7 @@ import {StackNavigator} from 'react-navigation'
 
 import HomeScreen from './HomeScreen'
 import MeditationScreen from './MeditationScreen'
+import {COLORS} from '../styles/styles'
 
 type Props = {}
 
@@ -15,6 +16,15 @@ const AppStack = StackNavigator({
 	},
 	Meditation: {
 		screen: MeditationScreen,
+	},
+}, {
+	headerMode: 'screen',
+	navigationOptions: {
+		title: 'Medithio',
+		headerStyle: {backgroundColor: COLORS.BLUE},
+		headerTitleStyle: {color: COLORS.TEXT_COLOR, alignSelf: 'center'},
+		headerLeft: <View/>,
+		headerRight: <View/>,
 	},
 })
 

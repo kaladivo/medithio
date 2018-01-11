@@ -1,11 +1,14 @@
 import React from 'react'
 import Realm from 'realm'
 import {observer} from 'mobx-react'
+import {View} from 'react-native'
 
 import realmModels from './models/realm'
 import appStore from './stores/appStore'
 import LoadingScreen from './screens/LoadingScreen'
 import AppScreen from './screens/AppScreen'
+import {COLORS} from './styles/styles'
+import StatusBar from './components/styled/StatusBar'
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms))
@@ -23,8 +26,10 @@ class App extends React.Component<{}> {
 	}
 
 	render() {
-		if (appStore.loading) return <LoadingScreen/>
-		return <AppScreen/>
+		return <View style={{flex: 1}}>
+			<StatusBar/>
+			{appStore.loading ? <LoadingScreen/> : <AppScreen/>}
+		</View>
 	}
 }
 
