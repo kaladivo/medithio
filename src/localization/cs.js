@@ -1,0 +1,16 @@
+export default {
+	durationPrompt: 'Jak dlouho chceš meditovat',
+	minutesShort: 'min',
+	timeMeditated: 'Celkem ',
+	streak: 'Kombo',
+	longestStreak: 'Nejdelší kombo',
+	beginMeditation: 'Začít meditaci',
+	pickDuration: 'Zvol délku meditace',
+	picked: 'Vybráno:',
+	cancel: 'Zrušit',
+	submit: 'potvrdit',
+	areYouSure: 'Vážně?',
+	areYouSureDescription: 'Doopravdy chceš zrušit aktuální meditaci?',
+	stay: 'Zůstat',
+	leave: 'Odejít',
+}

@@ -5,6 +5,7 @@ import {View, StyleSheet} from 'react-native'
 
 import {Section, Text, IconButton} from './StyledComponents'
 import NumberPickerDialog from '../nativeModules/NumberPickerDialog'
+import strings from '../localization/strings'
 
 type Props = {
 	valueMinutes: number,
@@ -15,11 +16,11 @@ export default class DurationPicker extends React.Component<Props> {
 
 	displayPickerDialog = () => {
 		NumberPickerDialog.show({
-			beforeSelected: 'Vybráno: ',
-			afterSelected: ' min',
-			title: 'Vyber čas meditace',
-			submitText: 'Vybrat',
-			cancelText: 'Zrušit',
+			beforeSelected: strings.picked + ' ',
+			afterSelected: ' ' + strings.minutesShort,
+			title: strings.pickDuration,
+			submitText: strings.submit,
+			cancelText: strings.cancel,
 			max: 99,
 			min: 1,
 			defaultValue: this.props.valueMinutes,

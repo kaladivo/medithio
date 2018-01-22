@@ -12,6 +12,7 @@ import {COLORS, SPACES} from '../styles/styles'
 import longestStreakIcon from '../assets/icons/longest_streak.png'
 import streakIcon from '../assets/icons/streak.png'
 import timeMeditatedIcon from '../assets/icons/time_meditated.png'
+import strings from '../localization/strings'
 
 type Props = {
 	style?: any
@@ -36,17 +37,17 @@ export default class MeditationsStats extends React.Component<Props> {
 			<View style={styles.itemContainer}>
 				<Label style={styles.valueLabel} text={totalMeditatedText}/>
 				<Image style={styles.icon} source={timeMeditatedIcon}/>
-				<Label style={styles.descriptiveLabel} text={'Time meditated'}/>
+				<Label style={styles.descriptiveLabel} text={strings.timeMeditated}/>
 			</View>
 			<View style={styles.itemContainer}>
 				<Label style={styles.valueLabel} text={currentStreakText}/>
 				<Image style={styles.icon} source={streakIcon}/>
-				<Label style={styles.descriptiveLabel} text={'Streak'}/>
+				<Label style={styles.descriptiveLabel} text={strings.streak}/>
 			</View>
 			<View style={styles.itemContainer}>
 				<Label style={styles.valueLabel} text={longestStreakText}/>
 				<Image style={styles.icon} source={longestStreakIcon}/>
-				<Label style={styles.descriptiveLabel} text={'Longest streak'}/>
+				<Label style={styles.descriptiveLabel} text={strings.longestStreak}/>
 			</View>
 		</View>
 	}

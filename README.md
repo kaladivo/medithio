@@ -14,7 +14,7 @@ there are several todos that needs to be done.
 
 - [ ] Fix meditations stats
 - [ ] Optimize app for different screen resolutions
-- [ ] Add and review languages support (en and cs)
+- [x] Add and review languages support (en and cs)
 - [ ] Final design review
 - [ ] Improve loading screen
 

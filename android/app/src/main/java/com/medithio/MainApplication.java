@@ -12,6 +12,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.medithio.packages.MedithioReactPackage;
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
                     new MainReactPackage(),
                     new RealmReactPackage(),
                     new MedithioReactPackage(),
-                    new SvgPackage()
+                    new SvgPackage(),
+                    new ReactNativeLocalizationPackage()
             );
         }
 

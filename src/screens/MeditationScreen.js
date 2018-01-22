@@ -11,10 +11,11 @@ import Countdown from '../components/Countdown'
 import appStore from '../stores/appStore'
 import MeditationRecord from '../models/MeditationRecord'
 import meditationService from '../nativeModules/meditationService'
-import {RootView, Touchable, Text} from '../components/StyledComponents'
+import {RootView, Touchable} from '../components/StyledComponents'
+import strings from '../localization/strings'
+import {COLORS} from '../styles/styles'
 
 import type {MeditationType} from '../nativeModules/meditationService'
-import {COLORS} from '../styles/styles'
 
 type Props = {}
 
@@ -90,11 +91,11 @@ export default class MeditationScreen extends React.Component<Props> {
 
 const showExitAlert = () => {
 	Alert.alert(
-		'Jsi si jistý? ',
-		'Tím, že odejdeš vypneš probíhající meditaci',
+		strings.areYouSure,
+		strings.areYouSureDescription,
 		[
-			{text: 'Zůstat', onPress: () => null},
-			{text: 'Odejít', onPress: () => meditationService.stopMeditation()},
+			{text: strings.stay, onPress: () => null},
+			{text: strings.leave, onPress: () => meditationService.stopMeditation()},
 		],
 	)
 }

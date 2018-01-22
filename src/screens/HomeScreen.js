@@ -10,6 +10,7 @@ import meditationService from '../nativeModules/meditationService'
 import {Section, Button, RootView, Label} from '../components/StyledComponents'
 import DurationPicker from '../components/DurationPicker'
 import {SPACES} from '../styles/styles'
+import strings from '../localization/strings'
 
 const KEY_DURATION = 'selectedMeditationDuration'
 
@@ -49,11 +50,6 @@ export default class HomeScreen extends React.Component<Props, State> {
 	startMeditation = () => {
 		const {selectedDurationMin} = this.state
 
-		if (selectedDurationMin === '') {
-			ToastAndroid.show('Musíš vybrat čas maštáku.', ToastAndroid.SHORT)
-			return
-		}
-
 		Keyboard.dismiss()
 		meditationService.startMeditation({
 			startedAt: new Date(),
@@ -69,14 +65,14 @@ export default class HomeScreen extends React.Component<Props, State> {
 		const {selectedDurationMin} = this.state
 		return <RootView style={styles.container}>
 			<View style={styles.top}>
-				<Label style={styles.label} text={'Kolik minut chceš meditovat G?'}/>
+				<Label style={styles.label} text={strings.durationPrompt}/>
 				<DurationPicker valueMinutes={selectedDurationMin}
 								onPicked={this.onPickDuration}/>
 			</View>
 
 			<View style={styles.bottom}>
 				<MeditationsStats style={styles.stats}/>
-				<Button style={styles.button} title={'Začít meditaci'} onPress={this.startMeditation}/>
+				<Button style={styles.button} title={strings.beginMeditation} onPress={this.startMeditation}/>
 			</View>
 		</RootView>
 	}
