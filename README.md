@@ -14,6 +14,8 @@ there are several todos that needs to be done.
 
 - [ ] Fix meditations stats
 - [ ] Optimize app for different screen resolutions
+- [ ] Add and review languages support (en and cs)
+- [ ] Final design review
 
 ## Credits
 This app was created and is maintained by [Sidario](https://sidario.cz/en) 
