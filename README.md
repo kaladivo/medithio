@@ -14,3 +14,7 @@ there are several todos that needs to be done.
 
 - [ ] Fix meditations stats
 - [ ] Optimize app for different screen resolutions
+
+## Credits
+This app was created and is maintained by [Sidario](https://sidario.cz) 
+team and is of course open for suggestions and PR from community.
