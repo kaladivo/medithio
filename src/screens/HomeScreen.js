@@ -1,23 +1,37 @@
 //@flow 
 
 import React from 'react'
-import {View, StyleSheet, Text, Button, TextInput, Keyboard, ToastAndroid} from 'react-native'
-import MeditationsStats from '../components/MeditationsStats'
+import {StyleSheet, Keyboard, View, ToastAndroid, AsyncStorage} from 'react-native'
 import {autorun} from 'mobx'
+import {observer} from 'mobx-react'
+
+import MeditationsStats from '../components/MeditationsStats'
 import meditationService from '../nativeModules/meditationService'
+import {Section, Button, RootView, Label} from '../components/StyledComponents'
+import DurationPicker from '../components/DurationPicker'
+import {SPACES} from '../styles/styles'
+
+const KEY_DURATION = 'selectedMeditationDuration'
 
 type Props = {
 	navigation: any
 }
 
 type State = {
-	selectedDurationMin: number | ''
+	selectedDurationMin: number
 }
 
+//$FlowFixMe
+@observer
 export default class HomeScreen extends React.Component<Props, State> {
 	state = {selectedDurationMin: 20}
 	navigation = this.props.navigation
 	disposeAutorun: () => null
+
+	async componentWillMount() {
+		const selectedDurationMin = Number(await AsyncStorage.getItem(KEY_DURATION))
+		this.setState({selectedDurationMin})
+	}
 
 	componentDidMount() {
 		this.disposeAutorun = autorun(() => {
@@ -25,8 +39,11 @@ export default class HomeScreen extends React.Component<Props, State> {
 		})
 	}
 
-	componentWillUnmount() {
+	async componentWillUnmount() {
 		this.disposeAutorun()
+
+		const {selectedDurationMin} = this.state
+		await AsyncStorage.setItem(KEY_DURATION, selectedDurationMin.toString())
 	}
 
 	startMeditation = () => {
@@ -44,32 +61,50 @@ export default class HomeScreen extends React.Component<Props, State> {
 		})
 	}
 
-	onSelectTime = (text: string) => {
-		if (text === '') return this.setState({selectedDurationMin: ''})
-
-		try {
-			const number = Math.floor(Number(text))
-			this.setState({selectedDurationMin: number})
-		} catch (err) {
-			console.log(text + ' is not a number')
-		}
+	onPickDuration = (duration: number) => {
+		this.setState({selectedDurationMin: duration})
 	}
 
 	render() {
 		const {selectedDurationMin} = this.state
-		return <View style={styles.container}>
-			<Text>Kolik minut chceš meditovat G?</Text>
-			<TextInput value={selectedDurationMin + ''} onChangeText={this.onSelectTime} keyboardType={'phone-pad'}/>
-			<Button title={'Začít meditaci'} onPress={this.startMeditation}/>
-			<MeditationsStats/>
-		</View>
+		return <RootView style={styles.container}>
+			<View style={styles.top}>
+				<Label style={styles.label} text={'Kolik minut chceš meditovat G?'}/>
+				<DurationPicker valueMinutes={selectedDurationMin}
+								onPicked={this.onPickDuration}/>
+			</View>
+
+			<View style={styles.bottom}>
+				<MeditationsStats style={styles.stats}/>
+				<Button style={styles.button} title={'Začít meditaci'} onPress={this.startMeditation}/>
+			</View>
+		</RootView>
 	}
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-})
+const
+	styles = StyleSheet.create({
+		container: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+			flexDirection: 'column',
+		},
+		top: {
+			flexGrow: 1,
+			width: '100%',
+		},
+		bottom: {
+			width: '100%',
+			flexGrow: 0,
+		},
+		label: {
+			textAlign: 'center',
+		},
+		stats: {
+			marginBottom: SPACES.SPACE_C,
+		},
+		button: {
+			width: '100%',
+		},
+	})

@@ -1,15 +1,17 @@
 //@flow 
 
 import React from 'react'
-import {View, ActivityIndicator, StyleSheet} from 'react-native'
+import {ActivityIndicator, StyleSheet} from 'react-native'
+
+import {RootView} from '../components/StyledComponents'
 
 type Props = {}
 
 export default class LoadingScreen extends React.Component<Props> {
 	render() {
-		return <View style={styles.container}>
-			<ActivityIndicator size={'large'} color={"#0000FF"}/>
-		</View>
+		return <RootView style={styles.container}>
+			<ActivityIndicator size={'large'} color={'#0000FF'}/>
+		</RootView>
 	}
 }
 

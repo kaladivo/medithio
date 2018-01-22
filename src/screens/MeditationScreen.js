@@ -1,17 +1,20 @@
 //@flow 
 
 import React from 'react'
-import {View, Button, StyleSheet, Alert, BackHandler} from 'react-native'
+import {View, StyleSheet, Alert, BackHandler} from 'react-native'
 import {observer} from 'mobx-react'
 import {autorun} from 'mobx'
+import Icon from 'react-native-vector-icons/Entypo'
 
 import HeaderBackButton from '../components/styled/HeaderBackButton'
 import Countdown from '../components/Countdown'
 import appStore from '../stores/appStore'
 import MeditationRecord from '../models/MeditationRecord'
 import meditationService from '../nativeModules/meditationService'
+import {RootView, Touchable, Text} from '../components/StyledComponents'
 
 import type {MeditationType} from '../nativeModules/meditationService'
+import {COLORS} from '../styles/styles'
 
 type Props = {}
 
@@ -65,14 +68,23 @@ export default class MeditationScreen extends React.Component<Props> {
 		const currentMeditation = meditationService.currentMeditation
 		if (!currentMeditation) return // Should not happen
 
-		return <View style={styles.container}>
-			<Countdown
-				target={new Date(currentMeditation.startedAt.getTime() + currentMeditation.durationSec * 1000)}
-				onFinish={() => null}/>
-			<Button
-				title={'Zastavit'}
-				onPress={showExitAlert}/>
-		</View>
+		return <RootView style={styles.container}>
+			<View style={styles.timerContainer}>
+				<Countdown
+					start={currentMeditation.startedAt}
+					target={new Date(currentMeditation.startedAt.getTime() + currentMeditation.durationSec * 1000)}
+					onFinish={() => null}/>
+
+			</View>
+
+			<View style={styles.buttonContainer}>
+				<Touchable
+					style={styles.button}
+					onPress={showExitAlert}>
+					<Icon name={'cross'} color={COLORS.TEXT_COLOR} size={30}/>
+				</Touchable>
+			</View>
+		</RootView>
 	}
 }
 
@@ -89,8 +101,36 @@ const showExitAlert = () => {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		alignItems: 'center',
+		display: 'flex',
+		flexGrow: 1,
+	},
+	timerContainer: {
+		display: 'flex',
+		flexGrow: 1,
+		width: '100%',
 		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	buttonContainer: {
+		display: 'flex',
+		flexGrow: 0,
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	button: {
+		width: 50,
+		height: 50,
+		paddingVertical: 0,
+		paddingHorizontal: 0,
+		borderRadius: 1000,
+		backgroundColor: COLORS.BLUE,
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	buttonText: {
+		fontSize: 20,
+		fontWeight: 'bold',
 	},
 })

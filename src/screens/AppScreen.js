@@ -1,7 +1,7 @@
 //@flow 
 
 import React from 'react'
-import {View, StyleSheet, Text} from 'react-native'
+import {View} from 'react-native'
 import {StackNavigator} from 'react-navigation'
 
 import HomeScreen from './HomeScreen'
