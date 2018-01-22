@@ -16,6 +16,7 @@ there are several todos that needs to be done.
 - [ ] Optimize app for different screen resolutions
 - [ ] Add and review languages support (en and cs)
 - [ ] Final design review
+- [ ] Improve loading screen
 
 ## Credits
 This app was created and is maintained by [Sidario](https://sidario.cz/en) 
